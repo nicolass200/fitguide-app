@@ -1,5 +1,3 @@
-// lib/models/muscle_group.dart
-
 class MuscleGroup {
   final int id;
   final String name;
@@ -12,36 +10,35 @@ class MuscleGroup {
   });
 
   factory MuscleGroup.fromJson(Map<String, dynamic> json) {
-    final id = json['id'] as int;
-    final nameEn = json['name'] as String? ?? 'Grupo muscular';
+    final englishName = json['name']?.toString() ?? '';
 
     return MuscleGroup(
-      id: id,
-      name: _translateCategory(id, nameEn),
-      nameEn: nameEn,
+      id: json['id'] as int? ?? 0,
+      name: translateName(englishName),
+      nameEn: englishName,
     );
   }
 
-  static String _translateCategory(int id, String fallback) {
-    const names = {
-      8: 'Braços',
-      9: 'Pernas',
-      10: 'Abdômen',
-      11: 'Peito',
-      12: 'Costas',
-      13: 'Ombros',
-      14: 'Panturrilhas',
-      15: 'Cardio',
-    };
-
-    return names[id] ?? fallback;
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'nameEn': nameEn,
-    };
+  static String translateName(String name) {
+    switch (name.toLowerCase()) {
+      case 'abs':
+        return 'Abdômen';
+      case 'arms':
+        return 'Braços';
+      case 'back':
+        return 'Costas';
+      case 'calves':
+        return 'Panturrilhas';
+      case 'cardio':
+        return 'Cardio';
+      case 'chest':
+        return 'Peito';
+      case 'legs':
+        return 'Pernas';
+      case 'shoulders':
+        return 'Ombros';
+      default:
+        return name;
+    }
   }
 }

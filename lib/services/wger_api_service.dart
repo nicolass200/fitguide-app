@@ -40,22 +40,28 @@ class WgerApiService {
 
   /// Busca exercícios de um grupo muscular específico
   Future<List<Exercise>> fetchExercisesByCategory(int categoryId) async {
-    try {
-      final response = await _dio.get('/exercise/', queryParameters: {
+  try {
+    final response = await _dio.get(
+      '/exerciseinfo/',
+      queryParameters: {
         'format': 'json',
         'category': categoryId,
-        'language': AppConstants.wgerLanguageEn,
-        'status': 2,
         'limit': 50,
         'offset': 0,
-      });
+      },
+    );
 
-      final results = response.data['results'] as List<dynamic>;
-      return results.map((json) => Exercise.fromJson(json)).toList();
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    }
+    final results = response.data['results'] as List<dynamic>? ?? [];
+
+    return results
+        .map((json) => Exercise.fromJson(json as Map<String, dynamic>))
+        .toList();
+  } on DioException catch (e) {
+    throw _handleDioError(e);
+  } catch (e) {
+    throw ApiException('Erro ao carregar exercícios: $e');
   }
+}
 
   /// Busca exercícios por nome (para a barra de busca)
   Future<List<Exercise>> searchExercises(String query) async {

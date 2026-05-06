@@ -53,7 +53,7 @@ class MuscleGroupCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            muscleGroup.nameEn,
+            muscleGroup.name,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
@@ -79,7 +79,7 @@ class MuscleGroupCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            muscleGroup.nameEn,
+            muscleGroup.name,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
