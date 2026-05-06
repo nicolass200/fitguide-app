@@ -29,3 +29,6 @@ ios/Pods/
 
 # Coverage
 coverage/
+linux/
+macos/
+windows/
