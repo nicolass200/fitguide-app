@@ -1,0 +1,42 @@
+name: fitguide
+description: Aplicativo de academia para consulta de exercícios e montagem de treinos personalizados.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP Client
+  dio: ^5.4.0
+
+  # Gerenciamento de Estado
+  provider: ^6.1.1
+
+  # Banco de dados local
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
+  # Preferências locais
+  shared_preferences: ^2.2.2
+
+  # Áudio (diferencial: timer de descanso)
+  audioplayers: ^6.0.0
+
+  # Ícones extras
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/audio/
