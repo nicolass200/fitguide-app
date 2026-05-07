@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Permitir requisições HTTPS para domínios confiáveis -->
+    <domain-config cleartextTrafficPermitted="false">
+        <!-- WGER API -->
+        <domain includeSubdomains="true">wger.de</domain>
+        <trust-anchors>
+            <!-- Usar certificados do sistema -->
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
