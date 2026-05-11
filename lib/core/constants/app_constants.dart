@@ -1,13 +1,22 @@
 // lib/core/constants/app_constants.dart
 
 class AppConstants {
-  // Construtor privado — classe utilitária, não deve ser instanciada
   AppConstants._();
 
-  // WGER API
-  static const String wgerBaseUrl = 'https://wger.de/api/v2';
-  static const String wgerLanguagePt = '7'; // Português
-  static const String wgerLanguageEn = '2'; // Inglês (fallback)
+  // WorkoutX API
+  static const String workoutXBaseUrl = 'https://api.workoutxapp.com/v1';
+
+  // NÃO coloque sua chave direto no GitHub.
+  // Rode o app com:
+  // flutter run --dart-define=WORKOUTX_API_KEY=SUA_CHAVE_AQUI
+  static const String workoutXApiKey = String.fromEnvironment(
+    'WORKOUTX_API_KEY',
+  );
+
+  // Mantidos por compatibilidade com nomes antigos do projeto
+  static const String wgerBaseUrl = workoutXBaseUrl;
+  static const String wgerLanguagePt = '7';
+  static const String wgerLanguageEn = '2';
 
   // Chave do SharedPreferences
   static const String prefCompactMode = 'compact_mode';
@@ -16,7 +25,7 @@ class AppConstants {
   static const int minSeries = 1;
   static const int maxSeries = 6;
 
-  // Tempo padrão do timer de descanso (segundos)
+  // Tempo padrão do timer de descanso em segundos
   static const int defaultRestTimeSeconds = 60;
 
   // Nome do banco de dados local

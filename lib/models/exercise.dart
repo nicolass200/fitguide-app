@@ -9,6 +9,14 @@ class Exercise {
   final List<String> imageUrls;
   final List<int> muscleIds;
 
+  // Campos próprios da WorkoutX
+  final String apiId;
+  final String bodyPart;
+  final String target;
+  final String equipment;
+  final List<String> instructions;
+  final List<String> secondaryMuscles;
+
   const Exercise({
     required this.id,
     required this.name,
@@ -17,6 +25,12 @@ class Exercise {
     required this.categoryName,
     required this.imageUrls,
     required this.muscleIds,
+    this.apiId = '',
+    this.bodyPart = '',
+    this.target = '',
+    this.equipment = '',
+    this.instructions = const [],
+    this.secondaryMuscles = const [],
   });
 
   String? get primaryImageUrl {
@@ -25,195 +39,132 @@ class Exercise {
   }
 
   String get cleanDescription {
+    if (instructions.isNotEmpty) {
+      return instructions
+          .map((step) => step.trim())
+          .where((step) => step.isNotEmpty)
+          .join('\n\n');
+    }
+
     return description
         .replaceAll(RegExp(r'<[^>]*>'), '')
         .replaceAll('&nbsp;', ' ')
         .replaceAll('&amp;', '&')
         .replaceAll('&quot;', '"')
         .replaceAll('&#39;', "'")
-        .replaceAll('\n\n\n', '\n\n')
         .trim();
   }
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
-    final translation = _selectBestTranslation(json['translations']);
+    final apiId = json['id']?.toString().trim() ?? '';
+    final name = json['name']?.toString().trim() ?? '';
+    final bodyPart = json['bodyPart']?.toString().trim() ?? '';
+    final target = json['target']?.toString().trim() ?? '';
+    final equipment = json['equipment']?.toString().trim() ?? '';
+    final gifUrl = json['gifUrl']?.toString().trim() ?? '';
 
-    final directName = json['name']?.toString().trim() ?? '';
-    final directDescription = json['description']?.toString().trim() ?? '';
+    final instructions = _stringListFromJson(json['instructions']);
+    final secondaryMuscles = _stringListFromJson(json['secondaryMuscles']);
 
-    final translatedName = translation?['name']?.toString().trim() ?? '';
-    final translatedDescription =
-        translation?['description']?.toString().trim() ?? '';
-
-    final name = translatedName.isNotEmpty ? translatedName : directName;
-
-    final description = translatedDescription.isNotEmpty
-        ? translatedDescription
-        : directDescription;
-
-    final imageUrls = _extractImageUrls(json['images']);
-    final muscleIds = _extractMuscleIds(json['muscles']);
-    final categoryData = _extractCategory(json['category']);
+    final description = instructions.isNotEmpty
+        ? instructions.join('\n\n')
+        : 'Descrição não disponível para este exercício.';
 
     return Exercise(
-      id: _readInt(json['id']),
-      name: name.isNotEmpty ? name : 'Exercício sem nome',
-      description: description.isNotEmpty
-          ? description
-          : 'Descrição não disponível para este exercício.',
-      categoryId: categoryData.id,
-      categoryName: categoryData.name,
-      imageUrls: imageUrls,
-      muscleIds: muscleIds,
+      id: _stableIdFromString(apiId.isNotEmpty ? apiId : name),
+      apiId: apiId,
+      name: name.isNotEmpty ? _capitalizeWords(name) : 'Exercício sem nome',
+      description: description,
+      categoryId: _categoryIdFromBodyPart(bodyPart),
+      categoryName: _translateBodyPart(bodyPart),
+      imageUrls: gifUrl.isNotEmpty ? [gifUrl] : [],
+      muscleIds: const [],
+      bodyPart: bodyPart,
+      target: target,
+      equipment: equipment,
+      instructions: instructions,
+      secondaryMuscles: secondaryMuscles,
     );
   }
 
-  static Map<String, dynamic>? _selectBestTranslation(dynamic value) {
-    if (value is! List || value.isEmpty) return null;
-
-    final translations = value.whereType<Map<String, dynamic>>().toList();
-
-    if (translations.isEmpty) return null;
-
-    // Tenta português primeiro.
-    for (final item in translations) {
-      final language = item['language'];
-
-      if (_languageMatches(language, 7)) {
-        final name = item['name']?.toString().trim() ?? '';
-        if (name.isNotEmpty) return item;
-      }
-    }
-
-    // Depois tenta inglês.
-    for (final item in translations) {
-      final language = item['language'];
-
-      if (_languageMatches(language, 2)) {
-        final name = item['name']?.toString().trim() ?? '';
-        if (name.isNotEmpty) return item;
-      }
-    }
-
-    // Depois pega qualquer tradução com nome válido.
-    for (final item in translations) {
-      final name = item['name']?.toString().trim() ?? '';
-      if (name.isNotEmpty) return item;
-    }
-
-    return translations.first;
-  }
-
-  static bool _languageMatches(dynamic language, int expectedId) {
-    if (language is int) {
-      return language == expectedId;
-    }
-
-    if (language is String) {
-      return language == expectedId.toString();
-    }
-
-    if (language is Map<String, dynamic>) {
-      final id = language['id'];
-      if (id is int) return id == expectedId;
-      if (id is String) return id == expectedId.toString();
-
-      final shortName = language['short_name']?.toString().toLowerCase();
-      final code = language['code']?.toString().toLowerCase();
-
-      if (expectedId == 7) {
-        return shortName == 'pt' || code == 'pt';
-      }
-
-      if (expectedId == 2) {
-        return shortName == 'en' || code == 'en';
-      }
-    }
-
-    return false;
-  }
-
-  static List<String> _extractImageUrls(dynamic value) {
+  static List<String> _stringListFromJson(dynamic value) {
     if (value is! List) return [];
 
-    final urls = <String>[];
-
-    for (final item in value) {
-      String imageUrl = '';
-
-      if (item is String) {
-        imageUrl = item.trim();
-      } else if (item is Map<String, dynamic>) {
-        imageUrl = item['image']?.toString().trim() ??
-            item['image_url']?.toString().trim() ??
-            item['url']?.toString().trim() ??
-            '';
-      }
-
-      if (imageUrl.isEmpty || imageUrl == 'null') continue;
-
-      final fullUrl = imageUrl.startsWith('http')
-          ? imageUrl
-          : 'https://wger.de$imageUrl';
-
-      urls.add(fullUrl);
-    }
-
-    return urls;
+    return value
+        .map((item) => item?.toString().trim() ?? '')
+        .where((item) => item.isNotEmpty && item != 'null')
+        .toList();
   }
 
-  static List<int> _extractMuscleIds(dynamic value) {
-    if (value is! List) return [];
-
-    final ids = <int>[];
-
-    for (final item in value) {
-      if (item is int) {
-        ids.add(item);
-      } else if (item is String) {
-        final parsed = int.tryParse(item);
-        if (parsed != null) ids.add(parsed);
-      } else if (item is Map<String, dynamic>) {
-        final id = _readInt(item['id']);
-        if (id != 0) ids.add(id);
-      }
-    }
-
-    return ids;
+  static String _capitalizeWords(String text) {
+    return text
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
   }
 
-  static _CategoryData _extractCategory(dynamic value) {
-    if (value is int) {
-      return _CategoryData(id: value, name: '');
+  static int _stableIdFromString(String value) {
+    var hash = 0;
+
+    for (final codeUnit in value.codeUnits) {
+      hash = 0x1fffffff & (hash + codeUnit);
+      hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+      hash ^= hash >> 6;
     }
 
-    if (value is String) {
-      return _CategoryData(id: int.tryParse(value) ?? 0, name: '');
-    }
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    hash ^= hash >> 11;
+    hash = 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
 
-    if (value is Map<String, dynamic>) {
-      return _CategoryData(
-        id: _readInt(value['id']),
-        name: value['name']?.toString() ?? '',
-      );
-    }
-
-    return const _CategoryData(id: 0, name: '');
+    return hash.abs();
   }
 
-  static int _readInt(dynamic value) {
-    if (value is int) return value;
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
+  static int _categoryIdFromBodyPart(String bodyPart) {
+    switch (bodyPart.toLowerCase()) {
+      case 'waist':
+        return 10;
+      case 'upper arms':
+        return 8;
+      case 'back':
+        return 12;
+      case 'lower legs':
+        return 14;
+      case 'cardio':
+        return 15;
+      case 'chest':
+        return 11;
+      case 'upper legs':
+        return 9;
+      case 'shoulders':
+        return 13;
+      default:
+        return 0;
+    }
   }
-}
 
-class _CategoryData {
-  final int id;
-  final String name;
-
-  const _CategoryData({
-    required this.id,
-    required this.name,
-  });
+  static String _translateBodyPart(String bodyPart) {
+    switch (bodyPart.toLowerCase()) {
+      case 'waist':
+        return 'Abdômen';
+      case 'upper arms':
+        return 'Braços';
+      case 'back':
+        return 'Costas';
+      case 'lower legs':
+        return 'Panturrilhas';
+      case 'cardio':
+        return 'Cardio';
+      case 'chest':
+        return 'Peito';
+      case 'upper legs':
+        return 'Pernas';
+      case 'shoulders':
+        return 'Ombros';
+      default:
+        return bodyPart;
+    }
+  }
 }
