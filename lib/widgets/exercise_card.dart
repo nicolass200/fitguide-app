@@ -88,33 +88,35 @@ class ExerciseCard extends StatelessWidget {
     );
   }
 
-  Widget _buildThumbnail({required double size}) {
-    if (exercise.primaryImageUrl == null) {
-      return Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Icon(Icons.fitness_center, color: Colors.grey),
-      );
-    }
+ Widget _buildThumbnail({required double size}) {
+  print('Imagem do exercício: ${exercise.primaryImageUrl}');
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Image.network(
-        exercise.primaryImageUrl!,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => Container(
-          width: size,
-          height: size,
-          color: Colors.grey.shade200,
-          child: const Icon(Icons.fitness_center, color: Colors.grey),
-        ),
+  if (exercise.primaryImageUrl == null) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(8),
       ),
+      child: const Icon(Icons.fitness_center, color: Colors.grey),
     );
   }
+
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(8),
+    child: Image.network(
+      exercise.primaryImageUrl!,
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => Container(
+        width: size,
+        height: size,
+        color: Colors.grey.shade200,
+        child: const Icon(Icons.fitness_center, color: Colors.grey),
+      ),
+    ),
+  );
+}
 }

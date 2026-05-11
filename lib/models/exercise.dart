@@ -1,3 +1,5 @@
+import '../core/constants/app_constants.dart';
+
 // lib/models/exercise.dart
 
 class Exercise {
@@ -34,9 +36,27 @@ class Exercise {
   });
 
   String? get primaryImageUrl {
-    if (imageUrls.isEmpty) return null;
-    return imageUrls.first;
+  if (imageUrls.isEmpty) return null;
+
+  final url = imageUrls.first;
+
+  if (url.isEmpty) return null;
+
+  final apiKey = AppConstants.workoutXApiKey;
+
+  if (apiKey.isEmpty) {
+    return url;
   }
+
+  // Os GIFs da WorkoutX vêm protegidos pela API.
+  // Exemplo: https://api.workoutxapp.com/v1/gifs/0025.gif
+  if (url.contains('api.workoutxapp.com/v1/gifs')) {
+    final separator = url.contains('?') ? '&' : '?';
+    return '$url${separator}api-key=${Uri.encodeComponent(apiKey)}';
+  }
+
+  return url;
+}
 
   String get cleanDescription {
     if (instructions.isNotEmpty) {
