@@ -21,6 +21,8 @@ class ExerciseDetailScreen extends StatefulWidget {
 class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   int _selectedSeries = 3;
   bool _addToWorkout = false;
+
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _workoutNameController = TextEditingController();
 
   @override
@@ -158,7 +160,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(12),
@@ -213,71 +218,108 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Checkbox para adicionar ao treino
-            Row(
-              children: [
-                Checkbox(
-                  value: _addToWorkout,
-                  activeColor: AppTheme.primaryColor,
-                  onChanged: (value) {
-                    setState(() => _addToWorkout = value ?? false);
-                  },
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    value: _addToWorkout,
+                    activeColor: AppTheme.primaryColor,
+                    onChanged: (value) {
+                      setState(() {
+                        _addToWorkout = value ?? false;
+
+                        if (!_addToWorkout) {
+                          _workoutNameController.clear();
+                          _formKey.currentState?.reset();
+                        }
+                      });
+                    },
+                  ),
+                  const Expanded(
+                    child: Text(
+                      'Adicionar ao novo treino',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              if (_addToWorkout) ...[
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _workoutNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome do treino',
+                    hintText: 'Ex: Treino A - Peito e Tríceps',
+                    prefixIcon: Icon(Icons.edit),
+                  ),
+                  maxLength: 50,
+                  textInputAction: TextInputAction.done,
+                  validator: _validateWorkoutName,
+                  onFieldSubmitted: (_) => _saveWorkout(),
                 ),
-                const Expanded(
-                  child: Text(
-                    'Adicionar ao novo treino',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.save),
+                    label: const Text('Salvar Treino'),
+                    onPressed: _saveWorkout,
                   ),
                 ),
               ],
-            ),
-
-            // Campo de nome do treino — aparece apenas quando o checkbox está marcado
-            if (_addToWorkout) ...[
-              const SizedBox(height: 12),
-              TextField(
-                controller: _workoutNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nome do treino',
-                  hintText: 'Ex: Treino A - Peito e Tríceps',
-                  prefixIcon: Icon(Icons.edit),
-                ),
-                maxLength: 50,
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.save),
-                  label: const Text('Salvar Treino'),
-                  onPressed: _saveWorkout,
-                ),
-              ),
             ],
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Future<void> _saveWorkout() async {
-    final workoutName = _workoutNameController.text.trim();
+  String? _validateWorkoutName(String? value) {
+    final workoutName = value?.trim() ?? '';
+
+    if (!_addToWorkout) {
+      return null;
+    }
 
     if (workoutName.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, insira um nome para o treino.'),
-          backgroundColor: AppTheme.errorColor,
-        ),
-      );
+      return 'Informe o nome do treino.';
+    }
+
+    if (workoutName.length < 3) {
+      return 'O nome do treino deve ter pelo menos 3 caracteres.';
+    }
+
+    if (workoutName.length > 50) {
+      return 'O nome do treino deve ter no máximo 50 caracteres.';
+    }
+
+    return null;
+  }
+
+  Future<void> _saveWorkout() async {
+    if (!_addToWorkout) {
       return;
     }
 
+    final isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!isValid) {
+      return;
+    }
+
+    final workoutName = _workoutNameController.text.trim();
+
     final workoutExercise = WorkoutExercise(
-      workoutId: 0, // Será atribuído pelo banco
+      workoutId: 0,
       exerciseId: widget.exercise.id,
       exerciseName: widget.exercise.name,
       series: _selectedSeries,
@@ -296,9 +338,11 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
           backgroundColor: AppTheme.successColor,
         ),
       );
+
       setState(() {
         _addToWorkout = false;
         _workoutNameController.clear();
+        _formKey.currentState?.reset();
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
