@@ -1,5 +1,3 @@
-// lib/models/workout.dart
-
 /// Representa um exercício dentro de um treino, com número de séries
 class WorkoutExercise {
   final int? id; // ID no banco local (null antes de salvar)

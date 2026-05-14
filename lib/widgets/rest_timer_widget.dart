@@ -1,5 +1,3 @@
-// lib/widgets/rest_timer_widget.dart
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -61,11 +59,9 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
       _remainingSeconds = 0;
     });
 
-    // Toca o áudio de alerta ao terminar o descanso
     try {
       await _audioPlayer.play(AssetSource('audio/timer_end.mp3'));
     } catch (_) {
-      // Se o áudio não carregar, apenas ignora silenciosamente
     }
 
     if (mounted) {
@@ -144,7 +140,6 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
               ),
             ),
             const SizedBox(height: 16),
-            // Ajuste de tempo
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -158,7 +153,6 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
               ],
             ),
             const SizedBox(height: 12),
-            // Controles do timer
             Row(
               children: [
                 Expanded(

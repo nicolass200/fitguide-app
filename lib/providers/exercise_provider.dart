@@ -1,38 +1,33 @@
-// lib/providers/exercise_provider.dart
-
 import 'package:flutter/foundation.dart';
 import '../models/exercise.dart';
 import '../models/muscle_group.dart';
-import '../services/wger_api_service.dart';
+import '../services/workoutx_api_service.dart';
 import '../core/errors/app_exceptions.dart';
 
 enum LoadingState { idle, loading, success, error }
 
 class ExerciseProvider extends ChangeNotifier {
-  final WgerApiService _apiService;
+  final WorkoutXApiService _apiService;
 
   ExerciseProvider(this._apiService);
 
-  // ── Estado dos grupos musculares ──
   List<MuscleGroup> _muscleGroups = [];
   LoadingState _muscleGroupsState = LoadingState.idle;
   String _muscleGroupsError = '';
 
-  // ── Estado dos exercícios ──
   List<Exercise> _exercises = [];
   List<Exercise> _filteredExercises = [];
   LoadingState _exercisesState = LoadingState.idle;
   String _exercisesError = '';
 
-  // ── Estado do detalhe ──
+  final Map<int, List<Exercise>> _exercisesCacheByCategory = {};
+
   Exercise? _selectedExercise;
   LoadingState _detailState = LoadingState.idle;
   String _detailError = '';
 
-  // ── Busca ──
   String _searchQuery = '';
 
-  // ── Getters ──
   List<MuscleGroup> get muscleGroups => _muscleGroups;
   LoadingState get muscleGroupsState => _muscleGroupsState;
   String get muscleGroupsError => _muscleGroupsError;
@@ -50,8 +45,6 @@ class ExerciseProvider extends ChangeNotifier {
   bool get isMuscleGroupsLoading => _muscleGroupsState == LoadingState.loading;
   bool get isExercisesLoading => _exercisesState == LoadingState.loading;
   bool get isDetailLoading => _detailState == LoadingState.loading;
-
-  // ── Ações ──
 
   Future<void> loadMuscleGroups() async {
     if (_muscleGroupsState == LoadingState.loading) return;
@@ -78,14 +71,28 @@ class ExerciseProvider extends ChangeNotifier {
   }
 
   Future<void> loadExercisesByCategory(int categoryId) async {
-    _exercisesState = LoadingState.loading;
     _exercisesError = '';
     _searchQuery = '';
+
+    final cachedExercises = _exercisesCacheByCategory[categoryId];
+
+    if (cachedExercises != null && cachedExercises.isNotEmpty) {
+      _exercises = List.from(cachedExercises);
+      _filteredExercises = List.from(cachedExercises);
+      _exercisesState = LoadingState.success;
+      notifyListeners();
+      return;
+    }
+
+    _exercisesState = LoadingState.loading;
     notifyListeners();
 
     try {
       _exercises = await _apiService.fetchExercisesByCategory(categoryId);
       _filteredExercises = List.from(_exercises);
+
+      _exercisesCacheByCategory[categoryId] = List.from(_exercises);
+
       _exercisesState = LoadingState.success;
     } on AppException catch (e) {
       _exercisesState = LoadingState.error;
@@ -123,7 +130,6 @@ class ExerciseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Filtra exercícios localmente pelo nome digitado
   void filterExercises(String query) {
     _searchQuery = query;
 
@@ -145,5 +151,10 @@ class ExerciseProvider extends ChangeNotifier {
     _exercisesState = LoadingState.idle;
     _searchQuery = '';
     notifyListeners();
+  }
+
+  void clearCache() {
+    _exercisesCacheByCategory.clear();
+    clearExercises();
   }
 }

@@ -1,5 +1,3 @@
-// lib/models/muscle_group.dart
-
 class MuscleGroup {
   final int id;
   final String name;

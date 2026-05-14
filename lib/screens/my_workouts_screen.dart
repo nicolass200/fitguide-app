@@ -1,5 +1,3 @@
-// lib/screens/my_workouts_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/workout_provider.dart';

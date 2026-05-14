@@ -1,11 +1,8 @@
-// lib/core/theme/app_theme.dart
-
 import 'package:flutter/material.dart';
 
 class AppTheme {
   AppTheme._();
 
-  // Paleta de cores principal
   static const Color primaryColor = Color(0xFF1E88E5);
   static const Color primaryDark = Color(0xFF1565C0);
   static const Color accentColor = Color(0xFFFF6F00);

@@ -1,137 +1,48 @@
-# FitGuide
+# 💪 FitGuide
 
-Aplicativo mobile desenvolvido em Flutter para consulta de exercícios físicos por grupo muscular e criação de treinos personalizados.
+Aplicativo de academia desenvolvido em Flutter para consulta de exercícios por grupo muscular e montagem de treinos personalizados.
 
-O objetivo do FitGuide é ajudar alunos de academia a consultar exercícios, visualizar imagens/GIFs demonstrativos, entender a execução básica e montar seus próprios treinos sem depender de fichas em papel.
+O objetivo do FitGuide é permitir que o usuário consulte exercícios, visualize GIFs/imagens demonstrativas, veja instruções de execução e crie seus próprios treinos salvos localmente.
 
 ---
 
-## Sobre o projeto
+## 📱 Funcionalidades
 
-O FitGuide foi desenvolvido como projeto da disciplina de Desenvolvimento Mobile.
-
-O aplicativo permite:
-
-- Visualizar grupos musculares;
-- Listar exercícios por grupo muscular;
-- Ver detalhes do exercício com imagem/GIF e instruções;
+- Consultar exercícios por grupo muscular usando a WorkoutX API;
+- Visualizar exercícios com nome, GIF/imagem e instruções;
+- Buscar exercícios por nome;
+- Visualizar detalhes do exercício;
 - Selecionar exercícios para montar um treino;
 - Definir número de séries com slider;
-- Salvar treinos personalizados localmente;
-- Editar e excluir treinos salvos;
-- Persistir dados usando SQLite;
-- Utilizar API externa para carregamento dos exercícios;
-- Utilizar preferências locais com SharedPreferences.
+- Salvar treinos personalizados usando SQLite;
+- Listar treinos salvos;
+- Editar nome dos treinos;
+- Excluir treinos;
+- Timer de descanso com alerta sonoro;
+- Modo compacto de visualização usando SharedPreferences.
+
+> Observação: alguns nomes e instruções dos exercícios podem aparecer em inglês, pois são retornados diretamente pela API externa WorkoutX.
 
 ---
 
-## Tecnologias utilizadas
+## 🛠 Tecnologias utilizadas
 
-- Flutter
-- Dart
-- WorkoutX API
-- Dio
-- SQLite / Sqflite
-- SharedPreferences
-- Provider
-- Android Studio / VS Code
-
----
-
-## Funcionalidades implementadas
-
-### Consulta de exercícios
-
-O app consome dados da WorkoutX API para buscar exercícios por grupo muscular.
-
-Cada exercício pode exibir:
-
-- Nome;
-- Imagem/GIF demonstrativo;
-- Grupo muscular;
-- Instruções de execução.
-
-> Observação: os dados dos exercícios vêm diretamente da WorkoutX API. Por isso, alguns nomes e instruções podem aparecer em inglês, conforme o retorno original da API.
-
----
-
-### Montagem de treinos
-
-O usuário pode montar treinos personalizados selecionando exercícios e definindo a quantidade de séries.
-
-Funcionalidades disponíveis:
-
-- Selecionar exercícios com checkbox;
-- Definir séries de 1 a 6 com slider;
-- Validar formulário antes de salvar;
-- Salvar treino no banco local;
-- Visualizar treinos salvos;
-- Editar nome do treino;
-- Excluir treino.
-
----
-
-### Armazenamento local
-
-O aplicativo utiliza SQLite para armazenar os treinos criados pelo usuário.
-
-Mesmo após fechar e abrir o aplicativo novamente, os treinos permanecem salvos.
-
----
-
-## Requisitos atendidos
-
-| Requisito | Status |
+| Tecnologia | Uso |
 |---|---|
-| Interface com layout responsivo | Concluído |
-| Tela inicial com grupos musculares | Concluído |
-| Lista de exercícios por grupo | Concluído |
-| Tela de detalhes do exercício | Concluído |
-| Consumo de API REST | Concluído |
-| Exibição de imagem/GIF dos exercícios | Concluído |
-| Entrada de dados com formulário | Concluído |
-| Validação de formulário | Concluído |
-| Checkbox para selecionar exercícios | Concluído |
-| Slider para definir séries | Concluído |
-| Navegação entre telas | Concluído |
-| Armazenamento local com SQLite | Concluído |
-| CRUD de treinos | Concluído |
-| SharedPreferences | Implementado/Utilizado no app |
-| Cronômetro de descanso | Implementado como diferencial |
+| Flutter 3+ | Framework principal |
+| Dart | Linguagem de programação |
+| Provider | Gerenciamento de estado |
+| Dio | Consumo da WorkoutX API |
+| SQLite / sqflite | Persistência local dos treinos |
+| SharedPreferences | Preferências do usuário |
+| audioplayers | Alerta sonoro do timer |
+| Android Studio / VS Code | Ambiente de desenvolvimento |
 
 ---
 
-## Estrutura principal do projeto
+## 🚀 Como executar o projeto no VS Code
 
-```text
-lib/
-├── core/
-│   ├── constants/
-│   └── errors/
-├── models/
-│   ├── exercise.dart
-│   ├── muscle_group.dart
-│   └── workout.dart
-├── screens/
-│   ├── home_screen.dart
-│   ├── exercise_list_screen.dart
-│   ├── exercise_detail_screen.dart
-│   └── my_workouts_screen.dart
-├── services/
-│   ├── workoutx_api_service.dart
-│   └── workout_database_service.dart
-├── widgets/
-│   ├── exercise_card.dart
-│   ├── muscle_group_card.dart
-│   └── rest_timer_widget.dart
-└── main.dart
-
-```
----
-
-# Como executar o projeto no VS Code
-
-## 1. Pré-requisitos
+### 1. Pré-requisitos
 
 Antes de executar o projeto, é necessário ter instalado:
 
@@ -143,6 +54,11 @@ Antes de executar o projeto, é necessário ter instalado:
 - Android Studio instalado;
 - Emulador Android configurado ou celular físico conectado.
 
+Para verificar se o Flutter está configurado corretamente, abra o terminal e execute:
+
+```bash
+flutter doctor
+```
 
 Caso apareça algum problema relacionado às licenças do Android, execute:
 
@@ -152,9 +68,9 @@ flutter doctor --android-licenses
 
 ---
 
-## 2. Clonar ou baixar o projeto
+### 2. Clonar ou baixar o projeto
 
- Pode baixar o projeto pelo GitHub clicando em:
+O professor pode baixar o projeto pelo GitHub clicando em:
 
 ```text
 Code > Download ZIP
@@ -170,7 +86,7 @@ Depois, abra a pasta do projeto no VS Code.
 
 ---
 
-## 3. Instalar as dependências
+### 3. Instalar as dependências
 
 Com o projeto aberto no VS Code, abra o terminal integrado:
 
@@ -186,7 +102,7 @@ flutter pub get
 
 ---
 
-## 4. Chave da API WorkoutX
+### 4. Chave da API WorkoutX
 
 O aplicativo utiliza a WorkoutX API para carregar os exercícios e GIFs.
 
@@ -196,24 +112,26 @@ Para facilitar a execução durante a avaliação, a chave da API utilizada no p
 WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
 ```
 
+Substitua `SUA_CHAVE_DA_API_AQUI` pela chave real da API.
 
+---
 
-## 5. Executar o aplicativo pelo VS Code
+### 5. Executar o aplicativo pelo VS Code
 
 Com o emulador Android aberto ou um celular físico conectado, execute no terminal:
 
 ```bash
-flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
+flutter run --dart-define=WORKOUTX_API_KEY=SUA_CHAVE_DA_API_AQUI
 ```
 
 Exemplo:
 
-```bash
-flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34```
+flutter run --dart-define=WORKOUTX_API_KEY=coloque_a_chave_real_aqui
+```
 
 ---
 
-## 6. Selecionar dispositivo no VS Code
+### 6. Selecionar dispositivo no VS Code
 
 Caso tenha mais de um dispositivo disponível:
 
@@ -222,7 +140,7 @@ Caso tenha mais de um dispositivo disponível:
 3. Execute novamente:
 
 ```bash
-flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
+flutter run --dart-define=WORKOUTX_API_KEY=SUA_CHAVE_DA_API_AQUI
 ```
 
 Também é possível listar os dispositivos disponíveis com:
@@ -233,7 +151,7 @@ flutter devices
 
 ---
 
-## 7. Possíveis problemas
+## ⚠️ Possíveis problemas
 
 ### Exercícios não carregam
 
@@ -261,24 +179,93 @@ flutter clean
 flutter pub get
 ```
 
+Depois rode novamente:
+
+```bash
+flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
+```
+
 ---
 
-## Comando principal para avaliação
+## ✅ Comando principal para avaliação
+
+Execute estes comandos dentro da pasta do projeto:
 
 ```bash
 flutter pub get
-flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34```
+flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
+```
 
 ---
 
-## Observações importantes
+## 🗂 Estrutura do Projeto
+
+```text
+lib/
+├── main.dart                    # Entry point e configuração dos providers
+├── core/
+│   ├── constants/               # Constantes globais
+│   ├── errors/                  # Exceções customizadas
+│   └── theme/                   # Tema visual do app
+├── models/                      # Modelos de dados
+├── services/                    # Comunicação com API e banco local
+├── providers/                   # Gerenciamento de estado
+├── screens/                     # Telas do aplicativo
+└── widgets/                     # Componentes reutilizáveis
+```
+
+---
+
+## 📋 Telas do aplicativo
+
+| Tela | Descrição |
+|---|---|
+| `HomeScreen` | Tela inicial com grupos musculares e modo compacto |
+| `ExerciseListScreen` | Lista de exercícios com busca por nome |
+| `ExerciseDetailScreen` | Detalhes do exercício, GIF, instruções, slider, checkbox e timer |
+| `MyWorkoutsScreen` | Tela de treinos salvos com CRUD |
+
+---
+
+## 💾 Armazenamento local
+
+O aplicativo utiliza SQLite para salvar os treinos criados pelo usuário.
+
+Os dados permanecem salvos mesmo após fechar e abrir o aplicativo novamente.
+
+---
+
+## 🧪 Executar testes
+
+```bash
+flutter test
+```
+
+---
+
+## 📦 Gerar APK
+
+```bash
+flutter build apk --release --dart-define=wx_3d423d7d392f27ea1799bc1ed1ca316a79c664a403e44217f3911f34
+```
+
+---
+
+## 📝 Observações importantes
 
 - O aplicativo precisa de internet para carregar os exercícios da WorkoutX API.
-- Os treinos criados são salvos localmente usando SQLite.
-- A chave da API deve ser informada no comando de execução.
+- A chave da API deve ser informada usando `--dart-define`.
+- Os treinos são salvos localmente usando SQLite.
+- O modo compacto utiliza SharedPreferences.
 - Algumas informações dos exercícios podem aparecer em inglês porque são retornadas diretamente pela API externa.
-- O aplicativo foi desenvolvido para fins acadêmicos e pode conter limitações ou bugs.
--Desenvolvido como projeto acadêmico — Disciplina Mobile (P2).
--Nome: NICOLAS RODRIGUES FERREIRA DE CARVALHO
--Disciplina: Desenvolvimento Mobile  
--Curso: Engenharia de Software
+- O app foi desenvolvido como projeto acadêmico da disciplina de Desenvolvimento Mobile.
+
+---
+
+## 👤 Autor
+
+Desenvolvido como projeto acadêmico — Disciplina Mobile (P2).
+
+Nome: NICOLAS RODRIGUES FERREIRA DE CARVALHO
+Disciplina: Desenvolvimento Mobile  
+Curso: Engenharia de Software

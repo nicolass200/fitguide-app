@@ -1,5 +1,3 @@
-// lib/main.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +5,7 @@ import 'core/theme/app_theme.dart';
 import 'providers/exercise_provider.dart';
 import 'providers/workout_provider.dart';
 import 'providers/preferences_provider.dart';
-import 'services/wger_api_service.dart';
+import 'services/workoutx_api_service.dart';
 import 'services/workout_database_service.dart';
 import 'services/preferences_service.dart';
 import 'screens/home_screen.dart';
@@ -24,15 +22,12 @@ class FitGuideApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // Serviços (instâncias únicas injetadas nos providers)
-        Provider<WgerApiService>(create: (_) => WgerApiService()),
+        Provider<WorkoutXApiService>(create: (_) => WorkoutXApiService()),
         Provider<WorkoutDatabaseService>(create: (_) => WorkoutDatabaseService()),
         Provider<PreferencesService>(create: (_) => PreferencesService()),
-
-        // Providers de estado
         ChangeNotifierProvider<ExerciseProvider>(
           create: (context) => ExerciseProvider(
-            context.read<WgerApiService>(),
+            context.read<WorkoutXApiService>(),
           ),
         ),
         ChangeNotifierProvider<WorkoutProvider>(

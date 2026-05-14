@@ -1,5 +1,3 @@
-// lib/services/workout_database_service.dart
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../core/constants/app_constants.dart';
@@ -9,7 +7,6 @@ import '../models/workout.dart';
 class WorkoutDatabaseService {
   static Database? _database;
 
-  /// Singleton: garante uma única instância do banco
   Future<Database> get database async {
     _database ??= await _initDatabase();
     return _database!;
@@ -27,7 +24,6 @@ class WorkoutDatabaseService {
   }
 
   Future<void> _createTables(Database db, int version) async {
-    // Tabela de treinos
     await db.execute('''
       CREATE TABLE workouts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +32,6 @@ class WorkoutDatabaseService {
       )
     ''');
 
-    // Tabela de exercícios de cada treino
     await db.execute('''
       CREATE TABLE workout_exercises (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,11 +44,6 @@ class WorkoutDatabaseService {
     ''');
   }
 
-  // ──────────────────────────────────────────────
-  // CREATE
-  // ──────────────────────────────────────────────
-
-  /// Salva um novo treino e retorna o ID gerado
   Future<int> insertWorkout(Workout workout) async {
     try {
       final db = await database;
@@ -74,7 +64,6 @@ class WorkoutDatabaseService {
     }
   }
 
-  /// Adiciona um exercício a um treino existente
   Future<void> insertWorkoutExercise(WorkoutExercise exercise) async {
     try {
       final db = await database;
@@ -84,11 +73,6 @@ class WorkoutDatabaseService {
     }
   }
 
-  // ──────────────────────────────────────────────
-  // READ
-  // ──────────────────────────────────────────────
-
-  /// Retorna todos os treinos com seus exercícios
   Future<List<Workout>> fetchAllWorkouts() async {
     try {
       final db = await database;
@@ -122,11 +106,6 @@ class WorkoutDatabaseService {
     return maps.map(WorkoutExercise.fromMap).toList();
   }
 
-  // ──────────────────────────────────────────────
-  // UPDATE
-  // ──────────────────────────────────────────────
-
-  /// Atualiza o nome de um treino
   Future<void> updateWorkoutName(int workoutId, String newName) async {
     try {
       final db = await database;
@@ -141,7 +120,6 @@ class WorkoutDatabaseService {
     }
   }
 
-  /// Atualiza o número de séries de um exercício
   Future<void> updateExerciseSeries(int exerciseId, int series) async {
     try {
       final db = await database;
@@ -156,11 +134,6 @@ class WorkoutDatabaseService {
     }
   }
 
-  // ──────────────────────────────────────────────
-  // DELETE
-  // ──────────────────────────────────────────────
-
-  /// Remove um treino e todos os seus exercícios (CASCADE)
   Future<void> deleteWorkout(int workoutId) async {
     try {
       final db = await database;
@@ -170,7 +143,6 @@ class WorkoutDatabaseService {
     }
   }
 
-  /// Remove um exercício específico de um treino
   Future<void> deleteWorkoutExercise(int workoutExerciseId) async {
     try {
       final db = await database;

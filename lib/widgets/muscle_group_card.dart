@@ -1,5 +1,3 @@
-// lib/widgets/muscle_group_card.dart
-
 import 'package:flutter/material.dart';
 import '../models/muscle_group.dart';
 import '../core/theme/app_theme.dart';

@@ -1,5 +1,3 @@
-// lib/screens/exercise_list_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/exercise_provider.dart';
@@ -73,7 +71,7 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
         ),
         onChanged: (value) {
           context.read<ExerciseProvider>().filterExercises(value);
-          setState(() {}); // Atualiza o ícone de limpar
+          setState(() {});
         },
       ),
     );

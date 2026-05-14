@@ -1,5 +1,3 @@
-// lib/widgets/exercise_card.dart
-
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
 import '../core/theme/app_theme.dart';
@@ -34,6 +32,7 @@ class ExerciseCard extends StatelessWidget {
         children: [
           _buildThumbnail(size: 72),
           const SizedBox(width: 12),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +46,9 @@ class ExerciseCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+
                 const SizedBox(height: 4),
+
                 if (exercise.cleanDescription.isNotEmpty)
                   Text(
                     exercise.cleanDescription,
@@ -61,6 +62,7 @@ class ExerciseCard extends StatelessWidget {
               ],
             ),
           ),
+
           const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
@@ -72,51 +74,45 @@ class ExerciseCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.fitness_center, color: AppTheme.primaryColor, size: 20),
+          const Icon(
+            Icons.fitness_center,
+            color: AppTheme.primaryColor,
+            size: 20,
+          ),
+
           const SizedBox(width: 10),
+
           Expanded(
             child: Text(
               exercise.name,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
+
           const Icon(Icons.chevron_right, color: Colors.grey, size: 18),
         ],
       ),
     );
   }
 
- Widget _buildThumbnail({required double size}) {
-  print('Imagem do exercício: ${exercise.primaryImageUrl}');
-
-  if (exercise.primaryImageUrl == null) {
+  Widget _buildThumbnail({required double size}) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: AppTheme.primaryColor.withOpacity(0.08),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Icon(Icons.fitness_center, color: Colors.grey),
+      child: const Icon(
+        Icons.fitness_center,
+        color: AppTheme.primaryColor,
+        size: 30,
+      ),
     );
   }
-
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(8),
-    child: Image.network(
-      exercise.primaryImageUrl!,
-      width: size,
-      height: size,
-      fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => Container(
-        width: size,
-        height: size,
-        color: Colors.grey.shade200,
-        child: const Icon(Icons.fitness_center, color: Colors.grey),
-      ),
-    ),
-  );
-}
 }
