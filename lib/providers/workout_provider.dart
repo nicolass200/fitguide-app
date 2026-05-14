@@ -1,5 +1,3 @@
-// lib/providers/workout_provider.dart
-
 import 'package:flutter/foundation.dart';
 import '../models/workout.dart';
 import '../services/workout_database_service.dart';
@@ -46,7 +44,7 @@ class WorkoutProvider extends ChangeNotifier {
         exercises: exercises,
       );
       await _databaseService.insertWorkout(workout);
-      await loadWorkouts(); // Recarrega a lista
+      await loadWorkouts();
       return true;
     } on DatabaseAppException catch (e) {
       _errorMessage = e.message;

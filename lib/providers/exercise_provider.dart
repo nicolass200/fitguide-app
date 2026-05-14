@@ -1,5 +1,3 @@
-// lib/providers/exercise_provider.dart
-
 import 'package:flutter/foundation.dart';
 import '../models/exercise.dart';
 import '../models/muscle_group.dart';
@@ -13,29 +11,23 @@ class ExerciseProvider extends ChangeNotifier {
 
   ExerciseProvider(this._apiService);
 
-  // ── Estado dos grupos musculares ──
   List<MuscleGroup> _muscleGroups = [];
   LoadingState _muscleGroupsState = LoadingState.idle;
   String _muscleGroupsError = '';
 
-  // ── Estado dos exercícios ──
   List<Exercise> _exercises = [];
   List<Exercise> _filteredExercises = [];
   LoadingState _exercisesState = LoadingState.idle;
   String _exercisesError = '';
 
-  // Cache dos exercícios por grupo muscular
   final Map<int, List<Exercise>> _exercisesCacheByCategory = {};
 
-  // ── Estado do detalhe ──
   Exercise? _selectedExercise;
   LoadingState _detailState = LoadingState.idle;
   String _detailError = '';
 
-  // ── Busca ──
   String _searchQuery = '';
 
-  // ── Getters ──
   List<MuscleGroup> get muscleGroups => _muscleGroups;
   LoadingState get muscleGroupsState => _muscleGroupsState;
   String get muscleGroupsError => _muscleGroupsError;
@@ -53,8 +45,6 @@ class ExerciseProvider extends ChangeNotifier {
   bool get isMuscleGroupsLoading => _muscleGroupsState == LoadingState.loading;
   bool get isExercisesLoading => _exercisesState == LoadingState.loading;
   bool get isDetailLoading => _detailState == LoadingState.loading;
-
-  // ── Ações ──
 
   Future<void> loadMuscleGroups() async {
     if (_muscleGroupsState == LoadingState.loading) return;
@@ -140,7 +130,6 @@ class ExerciseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Filtra exercícios localmente pelo nome digitado
   void filterExercises(String query) {
     _searchQuery = query;
 

@@ -1,7 +1,5 @@
 import '../core/constants/app_constants.dart';
 
-// lib/models/exercise.dart
-
 class Exercise {
   final int id;
   final String name;
@@ -11,7 +9,6 @@ class Exercise {
   final List<String> imageUrls;
   final List<int> muscleIds;
 
-  // Campos próprios da WorkoutX
   final String apiId;
   final String bodyPart;
   final String target;

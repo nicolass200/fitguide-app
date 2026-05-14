@@ -1,5 +1,3 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/exercise_provider.dart';
@@ -21,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Carrega dados logo após o primeiro frame renderizado
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ExerciseProvider>().loadMuscleGroups();
       context.read<PreferencesProvider>().loadPreferences();
@@ -34,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('FitGuide'),
         actions: [
-          // Switch de modo compacto
           Consumer<PreferencesProvider>(
             builder: (context, prefs, _) {
               return Row(

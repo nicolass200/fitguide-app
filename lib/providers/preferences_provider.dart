@@ -1,5 +1,3 @@
-// lib/providers/preferences_provider.dart
-
 import 'package:flutter/foundation.dart';
 import '../services/preferences_service.dart';
 

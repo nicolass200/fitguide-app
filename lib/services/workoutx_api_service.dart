@@ -1,5 +1,3 @@
-// lib/services/workoutx_api_service.dart
-
 import 'package:dio/dio.dart';
 
 import '../core/constants/app_constants.dart';
@@ -33,7 +31,6 @@ class WorkoutXApiService {
     return MuscleGroup.defaultGroups();
   }
 
-  /// Busca exercícios por grupo muscular usando bodyPart da WorkoutX.
   Future<List<Exercise>> fetchExercisesByCategory(int categoryId) async {
     try {
       _validateApiKey();
@@ -67,7 +64,6 @@ class WorkoutXApiService {
     }
   }
 
-  /// Busca exercícios por nome usando o endpoint /name/:name.
   Future<List<Exercise>> searchExercises(String query) async {
     if (query.trim().isEmpty) return [];
 
@@ -100,7 +96,6 @@ class WorkoutXApiService {
     }
   }
 
-  /// Busca detalhes completos de um exercício pelo ID interno numérico.
   Future<Exercise> fetchExerciseDetail(int exerciseId) async {
     try {
       _validateApiKey();

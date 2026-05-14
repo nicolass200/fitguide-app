@@ -1,5 +1,3 @@
-// lib/screens/exercise_detail_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/exercise.dart';

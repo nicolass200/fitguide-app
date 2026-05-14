@@ -1,5 +1,3 @@
-// lib/widgets/error_state_widget.dart
-
 import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
 
