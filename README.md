@@ -278,3 +278,7 @@ flutter run --dart-define=WORKOUTX_API_KEY=wx_3d423d7d392f27ea1799bc1ed1ca316a79
 - A chave da API deve ser informada no comando de execução.
 - Algumas informações dos exercícios podem aparecer em inglês porque são retornadas diretamente pela API externa.
 - O aplicativo foi desenvolvido para fins acadêmicos e pode conter limitações ou bugs.
+-Desenvolvido como projeto acadêmico — Disciplina Mobile (P2).
+-Nome: NICOLAS RODRIGUES FERREIRA DE CARVALHO
+-Disciplina: Desenvolvimento Mobile  
+-Curso: Engenharia de Software
