@@ -3,13 +3,13 @@
 import 'package:flutter/foundation.dart';
 import '../models/exercise.dart';
 import '../models/muscle_group.dart';
-import '../services/wger_api_service.dart';
+import '../services/workoutx_api_service.dart';
 import '../core/errors/app_exceptions.dart';
 
 enum LoadingState { idle, loading, success, error }
 
 class ExerciseProvider extends ChangeNotifier {
-  final WgerApiService _apiService;
+  final WorkoutXApiService _apiService;
 
   ExerciseProvider(this._apiService);
 
@@ -23,6 +23,9 @@ class ExerciseProvider extends ChangeNotifier {
   List<Exercise> _filteredExercises = [];
   LoadingState _exercisesState = LoadingState.idle;
   String _exercisesError = '';
+
+  // Cache dos exercícios por grupo muscular
+  final Map<int, List<Exercise>> _exercisesCacheByCategory = {};
 
   // ── Estado do detalhe ──
   Exercise? _selectedExercise;
@@ -78,14 +81,28 @@ class ExerciseProvider extends ChangeNotifier {
   }
 
   Future<void> loadExercisesByCategory(int categoryId) async {
-    _exercisesState = LoadingState.loading;
     _exercisesError = '';
     _searchQuery = '';
+
+    final cachedExercises = _exercisesCacheByCategory[categoryId];
+
+    if (cachedExercises != null && cachedExercises.isNotEmpty) {
+      _exercises = List.from(cachedExercises);
+      _filteredExercises = List.from(cachedExercises);
+      _exercisesState = LoadingState.success;
+      notifyListeners();
+      return;
+    }
+
+    _exercisesState = LoadingState.loading;
     notifyListeners();
 
     try {
       _exercises = await _apiService.fetchExercisesByCategory(categoryId);
       _filteredExercises = List.from(_exercises);
+
+      _exercisesCacheByCategory[categoryId] = List.from(_exercises);
+
       _exercisesState = LoadingState.success;
     } on AppException catch (e) {
       _exercisesState = LoadingState.error;
@@ -145,5 +162,10 @@ class ExerciseProvider extends ChangeNotifier {
     _exercisesState = LoadingState.idle;
     _searchQuery = '';
     notifyListeners();
+  }
+
+  void clearCache() {
+    _exercisesCacheByCategory.clear();
+    clearExercises();
   }
 }

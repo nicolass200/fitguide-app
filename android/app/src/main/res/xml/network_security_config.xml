@@ -2,8 +2,8 @@
 <network-security-config>
     <!-- Permitir requisições HTTPS para domínios confiáveis -->
     <domain-config cleartextTrafficPermitted="false">
-        <!-- WGER API -->
-        <domain includeSubdomains="true">wger.de</domain>
+        <!-- WorkoutX API -->
+        <domain includeSubdomains="true">api.workoutxapp.com</domain>
         <trust-anchors>
             <!-- Usar certificados do sistema -->
             <certificates src="system" />

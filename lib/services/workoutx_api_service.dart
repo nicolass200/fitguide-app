@@ -1,4 +1,4 @@
-// lib/services/wger_api_service.dart
+// lib/services/workoutx_api_service.dart
 
 import 'package:dio/dio.dart';
 
@@ -7,12 +7,12 @@ import '../core/errors/app_exceptions.dart';
 import '../models/exercise.dart';
 import '../models/muscle_group.dart';
 
-class WgerApiService {
+class WorkoutXApiService {
   late final Dio _dio;
 
   final Map<int, String> _apiIdCache = {};
 
-  WgerApiService() {
+  WorkoutXApiService() {
     _dio = Dio(
       BaseOptions(
         baseUrl: AppConstants.workoutXBaseUrl,

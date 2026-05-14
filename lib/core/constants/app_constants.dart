@@ -6,17 +6,12 @@ class AppConstants {
   // WorkoutX API
   static const String workoutXBaseUrl = 'https://api.workoutxapp.com/v1';
 
-  // NÃO coloque sua chave direto no GitHub.
+  // Chave da API WorkoutX
   // Rode o app com:
   // flutter run --dart-define=WORKOUTX_API_KEY=SUA_CHAVE_AQUI
   static const String workoutXApiKey = String.fromEnvironment(
     'WORKOUTX_API_KEY',
   );
-
-  // Mantidos por compatibilidade com nomes antigos do projeto
-  static const String wgerBaseUrl = workoutXBaseUrl;
-  static const String wgerLanguagePt = '7';
-  static const String wgerLanguageEn = '2';
 
   // Chave do SharedPreferences
   static const String prefCompactMode = 'compact_mode';
